@@ -1,0 +1,21 @@
+Calculator start: 
+<template ngFor let-char [ngForOf]="'0.123456789*/+-=CRM'.split('')">
+    <button (click)="onClick(char)" [ngClass]="{'btn-primary': currentStateAcceptsChar(char)}" class="btn">{{char}}</button>
+</template>
+
+<br/>
+
+<b>current state: </b>{{state.name()}}, <b>accepts </b> {{currentlyAcceptedChars()}}
+<br/>
+<b>operator: </b>{{operator?.symbol()}}
+<br/>
+<b>operandString: </b>{{operandString}}
+<br/>
+<b>numInMem: </b>{{numInMem}}
+<br/>
+<b>display: </b>{{display}}
+<br/>
+<b>errorMsg: </b>{{errorMsg}}
+<br/>
+
+Calculator template ends.
