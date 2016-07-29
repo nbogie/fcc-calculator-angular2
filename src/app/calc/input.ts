@@ -6,11 +6,17 @@ export class Input {
     isPoint() {
         return this.c == '.';
     }
+    
     isDigit() {
         return /\d/.test(this.c);
     }
+
     isMinus() {
         return this.c == '-';
+    }
+
+    isEquals() {
+        return this.c == '=';
     }
 
     isOperator() {
@@ -37,7 +43,7 @@ export class Input {
                 throw "Unknown operator: " + this.c;
         }
     }
-    isNumericComponent() {
+    isDigitOrPoint() {
         return this.isPoint() || this.isDigit();
     }
 }

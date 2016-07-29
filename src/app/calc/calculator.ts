@@ -35,14 +35,15 @@ export class Calculator {
         if (this.operator) {
             let res = this.operator.apply(this.numInMem, newArg);
             this.numInMem = res;
-            this.display = "res: " + res;
+            this.display = "" + res;
+            this.operator = null;
         } else {
             this.numInMem = newArg;
             this.display = "";
         }
     }
     operandStringHasPoint() {
-        return this.operandString && /[.]/.test(this.operandString);    
+        return this.operandString && /[.]/.test(this.operandString);
     }
 
     resetState() {
@@ -50,7 +51,7 @@ export class Calculator {
         this.numInMem = null;
         this.operandString = "";
         this.operator = null;
-        this.display = "";
+        this.display = "0";
         this.numInMem = null;
         this.errorMsg = "";
     }
@@ -64,7 +65,7 @@ export class Calculator {
     handleInput(key) {
         console.log("handling input: " + key);
         this.errorMsg = "";
-        if (/^[+\-/*.0-9C]$/.test(key)) {
+        if (/^[+\-/*.0-9C=]$/.test(key)) {
             if (key === 'C') {
                 this.resetState();
             } else {
@@ -73,7 +74,7 @@ export class Calculator {
                     console.log("current state accepts input of ", + key);
                     console.log("consuming: ", key);
                     this.state.consumeInput(input);
-                    console.log("operator is now: " + this.operator);                 
+                    console.log("operator is now: " + this.operator);
                 } else {
                     console.log("illegal input for current state...");
                     this.indicateError(Error.ILLEGAL_INPUT_FOR_STATE);

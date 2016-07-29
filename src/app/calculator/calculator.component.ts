@@ -37,7 +37,7 @@ export class CalculatorComponent implements OnInit {
 
     constructor() { }
     currentStateAcceptsChar(c){
-        return this.calc.state.acceptsInput(new Input(c));
+        return c === 'C' || this.calc.state.acceptsInput(new Input(c));
     }
     
     currentlyAcceptedChars() {

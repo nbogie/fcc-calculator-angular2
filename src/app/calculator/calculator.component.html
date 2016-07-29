@@ -1,21 +1,37 @@
-Calculator start: 
-<template ngFor let-char [ngForOf]="'0.123456789*/+-=CRM'.split('')">
-    <button (click)="onClick(char)" [ngClass]="{'btn-primary': currentStateAcceptsChar(char)}" class="btn">{{char}}</button>
-</template>
+<h1>FCC Calculator app, Angular 2</h1>
+<div class="row">
+    <div class="col-sm-4 col-sm-offset-4">
+        <div class="row">
+            <div class="display" style="font-size: 2em">
+                {{display}}
+            </div>
+        </div>
 
-<br/>
+        <div *ngFor="let rowChars of ['789/'.split(''), '456*'.split(''), '123-'.split(''), '0.=+'.split('')]" class="row">
+            <button *ngFor="let char of rowChars" (click)="onClick(char)" [ngClass]="{'btn-primary': currentStateAcceptsChar(char), 'btn-default': !currentStateAcceptsChar(char) }"
+                class="btn col-xs-3">{{char}}</button>
+        </div>
 
-<b>current state: </b>{{state.name()}}, <b>accepts </b> {{currentlyAcceptedChars()}}
-<br/>
-<b>operator: </b>{{operator?.symbol()}}
-<br/>
-<b>operandString: </b>{{operandString}}
-<br/>
-<b>numInMem: </b>{{numInMem}}
-<br/>
-<b>display: </b>{{display}}
-<br/>
-<b>errorMsg: </b>{{errorMsg}}
-<br/>
+        <div class="row">
+            <button (click)="onClick('C')" [ngClass]="{'btn-primary': currentStateAcceptsChar('C'), 'btn-default': !currentStateAcceptsChar('C') }"
+                class="btn col-xs-3">{{'C'}}</button>
+        </div>
 
-Calculator template ends.
+    </div>
+
+</div>
+<br/>
+<div *ngIf="debug">
+    <b>current state: </b>{{state.name()}}, <b>accepts </b> {{currentlyAcceptedChars()}}
+    <br/>
+    <b>operator: </b>{{operator?.symbol()}}
+    <br/>
+    <b>operandString: </b>{{operandString}}
+    <br/>
+    <b>numInMem: </b>{{numInMem}}
+    <br/>
+    <b>display: </b>{{display}}
+    <br/>
+    <b>errorMsg: </b>{{errorMsg}}
+    <br/> Calculator template ends.
+</div>

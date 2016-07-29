@@ -21,9 +21,9 @@ export class StateAwaitOperandStart extends BaseState {
     acceptsInput(inp: Input): boolean {
         return inp.isDigit() || inp.isMinus();
     }
+
     consumeInput(inp): void {
         this.calc.operandString += inp.asChar();
-        console.log("opStr: " + this.calc.operandString);
         let ctor = null;
 
         if (inp.isMinus()) {
@@ -31,38 +31,50 @@ export class StateAwaitOperandStart extends BaseState {
         } else {
             ctor = StateAwaitEither;
         }
+        this.calc.display = this.calc.operandString;
         this.calc.changeState(new ctor(this.calc));
+
     }
 }
+
 //This should probably be a composite state that delegates.
 export class StateAwaitEither extends BaseState {
     name() { return 'StateAwaitEither'; };
 
-
-    acceptsInput(inp) {
-        return inp.isDigit() || (inp.isPoint() && !this.calc.operandStringHasPoint()) || inp.isOperator();
+    acceptsInput(inp: Input) {
+        return inp.isEquals() || inp.isDigit() || 
+            (inp.isPoint() && ! this.calc.operandStringHasPoint()) || 
+            inp.isOperator();
     }
+
     consumeInput(inp: Input): void {
         if (inp.isOperator()) {
             this.calc.finishAnyPreviousOperation();
             this.calc.operator = inp.parseAsOperator();
-            this.calc.display = "" + this.calc.operator;
+            this.calc.display += " " + this.calc.operator;
             this.calc.changeState(new StateAwaitOperandStart(this.calc));
-        } else {
+        } else if (inp.isEquals()) {
+            this.calc.finishAnyPreviousOperation();            
+            this.calc.changeState(new StateAwaitOperandStart(this.calc));
+        } else if (inp.isDigitOrPoint()) {
             this.calc.operandString += inp.asChar();
+            this.calc.display = this.calc.operandString;
         }
     }
 }
+
 //This should probably be a composite state that delegates.
 export class StateAwaitDigitOrPoint extends BaseState {
     name() { return 'StateAwaitDigitOrPoint'; };
 
     acceptsInput(inp) {
-        return (inp.isPoint() && !this.calc.operandStringHasPoint()) || inp.isDigit();
+        return (inp.isPoint() && !this.calc.operandStringHasPoint()) ||
+                 inp.isDigit();
     }
     consumeInput(inp: Input): void {
         //TODO: guard against illegal number strings e.g. "13...41"
-        this.calc.operandString += inp.asChar();
+        this.calc.operandString += inp.asChar();        
+        this.calc.display = this.calc.operandString;
         this.calc.changeState(new StateAwaitEither(this.calc));
     }
 }
